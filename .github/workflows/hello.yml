@@ -12,7 +12,7 @@ jobs:
       - name: Say Hello
         run: echo "Hello, World!"
   
-      - name: Run date
+      - name: Now it is
         run: date
 
       - name: Directory Content
