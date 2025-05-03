@@ -1,4 +1,3 @@
-
 const { test, expect } = require('@playwright/test')
 
 test.describe('Pokedex', () => {
@@ -21,5 +20,11 @@ test.describe('Pokedex', () => {
     await page.getByText('Next').click()
     await expect(page.getByTestId('stats')).toBeVisible()
     await expect(page).toHaveURL(/\/pokemon\/venusaur$/)
+  })
+
+  test('ivysaur page shows ability chlorophyll', async ({ page }) => {
+    await page.goto('/')
+    await page.getByText('ivysaur').click()
+    await expect(page.getByText('chlorophyll')).toBeVisible()
   })
 })
