@@ -1,6 +1,7 @@
 
-export default {
+module.exports = {
   env: {
+    node: true,
     browser: true,
     es6: true,
     'jest/globals': true,
@@ -14,6 +15,11 @@ export default {
     sourceType: 'module',
   },
   plugins: ['react', 'jest'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   rules: {
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
