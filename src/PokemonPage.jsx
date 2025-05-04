@@ -8,6 +8,7 @@ import ErrorMessage from './ErrorMessage'
 const formatName = (nameWithDash) => nameWithDash.replace('-', ' ')
 
 const PokemonPage = ({ previous, next }) => {
+  // wanted to make changes
   const { name } = useParams()
   const {
     data: pokemon,
