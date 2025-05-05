@@ -40,15 +40,22 @@ jobs:
           DEFAULT_BUMP: patch
           WITH_V: false
           DRY_RUN: false
+      - name: Notify Discord - Success
+        if: success()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: '🚀 New version deployed! \n\nRepository: ${{ github.repository }} \nVersion: ${{ steps.tag_version.outputs.new_tag }} \nCommit: ${{ github.sha }} \nBy: ${{ github.actor }} \n\nView changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}'
 
-  notify-on-test-failure:
-    needs: simple_deployment_pipeline
+  notify_failure:
     if: failure()
-    uses: ./.github/workflows/discord-notify.yml
-    with:
-      status: 'failure'
-      message: |
-        ❌ CI TEST FAILED for `${{ github.repository }}`
-        Commit: `${{ github.sha }}`
-        Author: `${{ github.actor }}`
-        Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    needs: [simple_deployment_pipeline, tag_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord - Failure
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: '🔥 Build failed! \n\nRepository: ${{ github.repository }} \nFailed job: ${{ github.job }} \nCommit: ${{ github.sha }} \nBy: ${{ github.actor }} \n\nError details: ${{ github.event.pull_request.title || github.event.head_commit.message }} \n\nView logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
