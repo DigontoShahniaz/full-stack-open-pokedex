@@ -1,9 +1,9 @@
 name: Fly Deploy
+
 on:
   push:
     branches:
       - main
-
   pull_request:
     branches:
       - main
@@ -17,6 +17,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  notify-on-deploy-success:
+    needs: deploy
+    if: success()
+    uses: ./.github/workflows/discord-notify.yml
+    with:
+      status: 'success'
+      message: |
+        ✅ Deployment SUCCESSFUL for `${{ github.repository }}`
+        Commit: `${{ github.sha }}`
+
+  notify-on-deploy-failure:
+    needs: deploy
+    if: failure()
+    uses: ./.github/workflows/discord-notify.yml
+    with:
+      status: 'failure'
+      message: |
+        ❌ Deployment FAILED for `${{ github.repository }}`
+        Commit: `${{ github.sha }}`
+        Author: `${{ github.actor }}`
+        Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

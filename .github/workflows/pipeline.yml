@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'  
+          node-version: '22'
       - name: Install dependencies
         run: npm install
       - name: Check style
@@ -40,3 +40,15 @@ jobs:
           DEFAULT_BUMP: patch
           WITH_V: false
           DRY_RUN: false
+
+  notify-on-test-failure:
+    needs: simple_deployment_pipeline
+    if: failure()
+    uses: ./.github/workflows/discord-notify.yml
+    with:
+      status: 'failure'
+      message: |
+        ❌ CI TEST FAILED for `${{ github.repository }}`
+        Commit: `${{ github.sha }}`
+        Author: `${{ github.actor }}`
+        Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
