@@ -46,7 +46,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: '🚀 New version deployed! \n\nRepository: ${{ github.repository }} \nVersion: ${{ steps.tag_version.outputs.new_tag }} \nCommit: ${{ github.sha }} \nBy: ${{ github.actor }} \n\nView changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}'
+          args: 'New version deployed! Repository: ${{ github.repository }}'
 
   notify_failure:
     if: failure()
@@ -58,4 +58,4 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: '🔥 Build failed! \n\nRepository: ${{ github.repository }} \nFailed job: ${{ github.job }} \nCommit: ${{ github.sha }} \nBy: ${{ github.actor }} \n\nError details: ${{ github.event.pull_request.title || github.event.head_commit.message }} \n\nView logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          args: 'Build failed! Repository: ${{ github.repository }}'
