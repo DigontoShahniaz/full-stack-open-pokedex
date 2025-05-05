@@ -25,7 +25,7 @@ jobs:
 
   tag_release:
     needs: simple_deployment_pipeline
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(join(github.event.commits.*.message, ' '), '#skip')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -39,4 +39,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           WITH_V: false
-          DRY_RUN: false  
+          DRY_RUN: false
